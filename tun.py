@@ -27,10 +27,7 @@ while True:
     # Get a packet from the tun interface
     packet = os.read(tun, 2048)
     ip = IP(packet)
-    rawbytes = ip.payload
-    obtained_message = rawbytes.decode('utf-8')
-    print(obtained_message)
-    newip = IP(src='1.2.3.4', dst=ip.src)
-    newip.payload =  str.encode(message)
+    print(ip)
+    newip = IP(src='1.2.3.4', dst=ip.src)/message
 
-    os.write(tun, bytes(newip))
+    os.write(tun, raw(newip))
