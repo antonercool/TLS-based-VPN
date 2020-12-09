@@ -3,7 +3,7 @@ import fcntl
 import struct
 import os
 import time
-from scapy.all import * as scapy
+from scapy.all import *
 
 TUNSETIFF = 0x400454ca
 IFF_TUN = 0x0001
@@ -25,6 +25,12 @@ os.system("ip link set dev {} up".format(ifname))
 while True:
     # Get a packet from the tun interface
     packet = os.read(tun, 2048)
-    
-    ip = scapy.IP(packet)
-    print(ip.summary())
+    ip = IP(packet)
+    print(f"ip.source : {ip.src}")
+    newip = IP(src='1.2.3.4', dst=ip.src)
+    print(f"newip : {newip}")
+
+    newpkt = newip/ip.payload
+    print(f"newpkt : {newpkt}")
+
+    os.write(tun, bytes(newpkt))
