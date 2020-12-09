@@ -22,15 +22,15 @@ print("Interface Name: {}".format(ifname))
 os.system("ip addr add 192.168.87.180/24 dev {}".format(ifname))
 os.system("ip link set dev {} up".format(ifname))
 
+message = "helloWord"
 while True:
     # Get a packet from the tun interface
     packet = os.read(tun, 2048)
     ip = IP(packet)
-    print(f"ip.source : {ip.src}")
+    rawbytes = ip.payload
+    obtained_message = rawbytes.decode('utf-8')
+    print(obtained_message)
     newip = IP(src='1.2.3.4', dst=ip.src)
-    print(f"newip : {newip}")
+    newip.payload =  str.encode(message)
 
-    newpkt = newip/ip.payload
-    print(f"newpkt : {newpkt}")
-
-    os.write(tun, bytes(newpkt))
+    os.write(tun, bytes(newip))
