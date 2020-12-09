@@ -22,11 +22,17 @@ print("Interface Name: {}".format(ifname))
 os.system("ip addr add 192.168.87.180/24 dev {}".format(ifname))
 os.system("ip link set dev {} up".format(ifname))
 
-message = "helloWord"
+
+SERVER_IP = "192.168.87.167"
+SERVER_PORT = 9090
+
+
+# Create UDP socket
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 while True:
     # Get a packet from the tun interface
     packet = os.read(tun, 2048)
     if True:
-        ip = IP(packet)
-        print(ip.summary())
+    # Send the packet via the tunnel
+    sock.sendto(packet, (SERVER_IP, SERVER_PORT))
 
