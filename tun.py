@@ -26,8 +26,7 @@ message = "helloWord"
 while True:
     # Get a packet from the tun interface
     packet = os.read(tun, 2048)
-    ip = IP(packet)
-    print(ip)
-    newip = IP(src='1.2.3.4', dst=ip.src)/message
+    if True:
+        ip = IP(packet)
+        print(ip.summary())
 
-    os.write(tun, raw(newip))
